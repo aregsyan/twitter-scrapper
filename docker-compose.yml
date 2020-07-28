@@ -1,0 +1,38 @@
+version: '3.6'
+services:
+  app:
+    build:
+      context: .
+    restart: always
+    cap_add:
+      - ALL
+    ports:
+      - "3000:3000"
+      - "9229:9229"
+    env_file:
+      - .env
+    container_name: twitter-scrapper-app
+    depends_on:
+      - db
+    networks:
+      local-net:
+        aliases:
+          - app
+  db:
+    image: mongo
+    restart: always
+    cap_add:
+      - ALL
+    env_file:
+      - .env
+    container_name: twitter-scrapper-db
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+      - ./mongodb:/data/db
+    networks:
+      local-net:
+        aliases:
+          - db
+networks:
+  local-net:
+    external: false
