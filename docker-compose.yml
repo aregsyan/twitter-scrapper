@@ -28,6 +28,7 @@ services:
     container_name: twitter-scrapper-db
     volumes:
       - ./db:/docker-entrypoint-initdb.d
+      - ./db/mongod.conf:/etc/mongod.conf:ro
       - ./mongodb:/data/db
     networks:
       local-net:
