@@ -8,7 +8,7 @@ module.exports = {
     },
     twitter: {
         url: process.env.TWITTER_URL || 'https://api.twitter.com/1.1/search/tweets.json',
-        rate_limit: 450,
+        rate_limit: 180,
         rate_interval: 900,
         bearer_token: process.env.TWITTER_BEARER_TOKEN || 'AAAAAAAAAAAAAAAAAAAAAABaGQEAAAAAyFehQ4g03gTt1V2sobKsLSwd1Ks%3DY3ZlWjoaqc3Qzsso1oz7zLyzJCeNXm1flIK5WJGQ0fb0oyFzDF'
     },

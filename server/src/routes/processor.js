@@ -1,4 +1,4 @@
-const dbManager = require('../managers/dbManager');
+const dbManager = require('../managers/db/dbManager');
 const services = require('../services/serviceMap');
 
 // TODO validate data here

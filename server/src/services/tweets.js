@@ -11,7 +11,7 @@ async function getTweets (db, d) {
 
 function getTweetsParams(d) {
     const q = {};
-    let sort = 1;
+    let sort = {id:1};
     const limit = Number(d.limit) && Number(d.limit) < MAX_LIMIT ? Number(d.limit) : MAX_LIMIT;
     if(d.topic_id) {
         if(!ObjectId.isValid(d.topic_id)) {
@@ -23,7 +23,7 @@ function getTweetsParams(d) {
     if(d.since_id) q.id = {$gt: d.since_id};
     if(d.sort) {
         if(Number(d.sort) === 1 || Number(d.sort) === -1) {
-            sort = d.sort;
+            sort.id = Number(d.sort);
         } else {
             throw new Error('Invalid sort parameter. Sort should be 1 or -1');
         }
@@ -39,12 +39,16 @@ async function getTweetsByCount (db, d) {
             foreignField: '_id',
             as:'topic'
         }});
-    agg.push({$unwind:'topic'});
+    agg.push({$unwind:'$topic'});
     agg.push({$group:{
-        _id: 'topic_id',
+        _id: '$topic_id',
         tweets_count: {$sum: 1},
-        tweets_ids: {$push: '$_id'},
         topic: {$first: '$topic'}
+        }});
+    agg.push({$project: {
+        _id: '$_id',
+        tweets_count: '$tweets_count',
+        name: '$topic.name'
         }});
     return db.collection('tweets').aggregate(agg, {cursor:{}}).toArray();
 }

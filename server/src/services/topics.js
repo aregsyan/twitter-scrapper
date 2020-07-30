@@ -4,16 +4,17 @@ const ObjectId = require('mongodb').ObjectID;
 
 // needs to add validation layer
 async function addTopic (db, d) {
-    const { e, v } = validator.addTopic(d);
-    if(e) {
-        throw new Error(`Validation error: ${e}`);
+    const { error, value } = validator.addTopic(d);
+    if(error) {
+        throw new Error(`Validation error: ${error}`);
     }
-    const exist = await utils.checkDataExistence(db, 'topics', v);
+    const exist = await utils.checkDataExistence(db, 'topics', value);
     if(exist) {
         throw new Error('Specified Data already exists');
     }
-    const ins = await db.collection('topics').insert(d);
-    return {_id: ins.insertedIds[0], ...v}
+    const obj = {...value, start_point:0, newest_tweet_id: 0, current_max_id: 0};
+    const ins = await db.collection('topics').insert(obj);
+    return {_id: ins.insertedIds[0], ...value}
 }
 
 async function getTopics (db, d) {
