@@ -1,6 +1,6 @@
 module.exports = {
     mongodb: {
-        host: process.env.MONGODB_HOST || '127.0.0.1',
+        host: process.env.MONGODB_HOST || 'db',
         port: process.env.MONGODB_PORT || '27017',
         user: process.env.MONGODB_USER || 'rwusr',
         password: process.env.MONGODB_PASSWORD || 'password',

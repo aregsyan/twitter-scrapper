@@ -1,12 +1,14 @@
+LOG_PATH := $(or $(LOGPATH), './logs')
+DB_PATH := $(or $(DBPATH), './mongodb')
 default: build
 
 build:
 	@echo BUILD WEB-DEV
-	@docker-compose -f docker-compose.yml -p twitter-scapper build
+	@TWITTER_BEARER_TOKEN=$(BEARER_TOKEN) LOG_PATH=$(LOG_PATH) DB_PATH=$(DB_PATH) docker-compose -f docker-compose.yml -p twitter-scapper build
 
 run: stop build
 	@echo START WEB-DEV
-	@docker-compose -f docker-compose.yml -p twitter-scapper up --remove-orphans -d
+	@LOG_PATH=$(LOG_PATH) DB_PATH=$(DB_PATH) docker-compose -f docker-compose.yml -p twitter-scapper up --remove-orphans -d
 
 stop:
 	@echo STOP WEB-DEV
