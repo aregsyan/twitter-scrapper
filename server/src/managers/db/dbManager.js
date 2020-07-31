@@ -7,8 +7,9 @@ class MongoDB {
         Object.assign(this, configs.mongodb);
         this._db = null;
         this.url = this.getUrl();
-        this.onStart = true;
+        this.onServerStart = true;
     }
+
     async connect() {
         if(!this._db) {
             try {
@@ -17,20 +18,20 @@ class MongoDB {
                 console.log(e)
             }
             this._db = this.client.db(this.db);
-            if(this.onStart) {
-                await this.trackVersioning();
-                this.onStart = true;
+            if(this.onServerStart) {
+                await this.resolveVersioning();
+                this.onServerStart = true;
             }
         }
     }
     async getDB() {
-        if(!this.verifyDb()) {
+        if(!this._isConnected()) {
             await this.connect();
         }
         return this._db;
     }
 
-    verifyDb() {
+    _isConnected() {
         return this._db && this.client && this.client.isConnected();
     }
     getUrl() {
@@ -40,7 +41,7 @@ class MongoDB {
         return `mongodb://${this.user}:${this.password}@${this.host}:${this.port}/${this.db}`;
     }
 
-    async trackVersioning() {
+    async resolveVersioning() {
         const db_versions = await this._db.collection('versions').find().toArray();
         for(let [k, v] of Object.entries(versions)) {
             if(!db_versions.find(it => it.version === k)) {

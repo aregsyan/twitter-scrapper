@@ -1,5 +1,5 @@
 const dbManager = require('../managers/db/dbManager');
-const services = require('../services/serviceMap');
+const services = require('./serviceMap');
 
 // TODO validate data here
 
@@ -11,9 +11,9 @@ const process = async (service, req, res, next) => {
     try {
         const db = await dbManager.getDB();
         const ret = await services[service](db, data);
-        res.status(201).send(ret || {});
+        res.status(200).send(ret || {});
     } catch(e) {
-        console.log(e.message)
+        console.log(e)
         res.status(500).send(e.message);
     }
 }

@@ -12,7 +12,7 @@ async function getTweets (db, d) {
 function getTweetsParams(d) {
     const q = {};
     let sort = {id:1};
-    const limit = Number(d.limit) && Number(d.limit) < MAX_LIMIT ? Number(d.limit) : MAX_LIMIT;
+    const limit = +d.limit && +d.limit < MAX_LIMIT ? +d.limit : MAX_LIMIT;
     if(d.topic_id) {
         if(!ObjectId.isValid(d.topic_id)) {
             throw new Error('Topic Id is not valid');
@@ -22,8 +22,8 @@ function getTweetsParams(d) {
     if(d.max_id) q.id = {$lt: d.max_id};
     if(d.since_id) q.id = {$gt: d.since_id};
     if(d.sort) {
-        if(Number(d.sort) === 1 || Number(d.sort) === -1) {
-            sort.id = Number(d.sort);
+        if(+d.sort === 1 || +d.sort === -1) {
+            sort.id = +d.sort;
         } else {
             throw new Error('Invalid sort parameter. Sort should be 1 or -1');
         }
@@ -54,6 +54,7 @@ async function getTweetsByCount (db, d) {
 }
 
 module.exports = {
-    getTweets, getTweetsByCount
+    getTweets,
+    getTweetsByCount
 };
 

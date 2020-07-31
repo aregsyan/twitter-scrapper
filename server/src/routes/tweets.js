@@ -1,9 +1,9 @@
 const express = require('express');
-const processor = require('./processor');
+const handler = require('../services/handler');
 
 const router = express.Router();
 
-router.get('/tweets', processor.process.bind(processor, 'tweets.get'));
-router.get('/tweets/count', processor.process.bind(processor, 'tweets.get_count'));
+router.get('/tweets', handler.process.bind(handler, 'tweets.get'));
+router.get('/tweets/count', handler.process.bind(handler, 'tweets.get_count'));
 
 module.exports = router;
